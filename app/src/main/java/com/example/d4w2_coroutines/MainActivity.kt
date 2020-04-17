@@ -8,8 +8,9 @@ import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
 
+    private val parentJob = Job()
     private val coroutineScope =
-        CoroutineScope(Dispatchers.Main)
+        CoroutineScope(Dispatchers.Main + parentJob)
 
     var counter = 0
 
@@ -53,4 +54,9 @@ class MainActivity : AppCompatActivity() {
             }
             return@async resp
         }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        parentJob.cancel()
+    }
 }
